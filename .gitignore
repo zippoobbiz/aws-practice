@@ -1,0 +1,6 @@
+.terraform
+.gradle
+.mvn
+.settings
+.vscode
+bin
