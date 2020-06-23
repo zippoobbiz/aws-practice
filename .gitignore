@@ -5,3 +5,5 @@
 .vscode
 bin
 .DS_Store
+node_modules
+target
