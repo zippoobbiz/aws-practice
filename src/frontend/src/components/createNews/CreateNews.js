@@ -15,7 +15,7 @@ class CreateNews extends React.Component {
   }
 
   handleSubmit(event) {
-    axios.post('http://localhost:8081/create', {
+    axios.post('/create', {
       title: this.state.value
     }).then(res => {
       this.props.callBack();
@@ -27,7 +27,6 @@ class CreateNews extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <form onSubmit={this.handleSubmit}>
         <label>

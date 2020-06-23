@@ -16,7 +16,7 @@ class App extends Component {
 
   refresh() {
     axios.get(
-      'http://localhost:8081/select'
+      '/select'
     ).then(res => {
       this.setState({
         data: res.data
@@ -28,10 +28,8 @@ class App extends Component {
 
   componentDidMount() {
     axios.get(
-      'http://localhost:8081/select'
+      '/select'
     ).then(res => {
-      console.log('somehitng')
-      console.log(res.data)
       this.setState({
         data: res.data
       })

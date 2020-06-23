@@ -24,11 +24,11 @@ variable "asg_cluster_instance_type" {
 # ASG
 
 variable "asg_min_size" {
-   default = 3
+   default = 1
 }
 
 variable "asg_max_size" {
-   default = 5
+   default = 2
 }
 
 variable "cfn_stack_description" {
@@ -37,7 +37,7 @@ variable "cfn_stack_description" {
 
 
 variable "asg_desired_capacity" {
-   default = 4
+   default = 1
 }
 
 variable "cfn_signal_count" {
@@ -52,6 +52,8 @@ variable "launch_configuration_name" {
    default = "companyNews-ASG-LC-20200621012711916400000001"
 }
 
+
+
 # variable "ssm_parameter_name_prefix" {
 #   default = "/dev/kong"
 # }
@@ -64,18 +66,18 @@ variable "launch_configuration_name" {
 # }
  
 # ECS
-# variable "ecs_cluster_instance_type" {
-#   default = "m5.xlarge"
-# }
+variable "ecs_cluster_instance_type" {
+  default = "t2.micro"
+}
 # variable "app_image" {
 #   default = "0jas/kong:latest"
 # }
-# variable "ecs_service_desired_count" {
-#   default = 1
-# }
-# variable "container_memory_reservation" {
-#   default = 64
-# }
+variable "ecs_service_desired_count" {
+  default = 1
+}
+variable "container_memory_reservation" {
+  default = 64
+}
 
 # DB
 # variable "db_name" {

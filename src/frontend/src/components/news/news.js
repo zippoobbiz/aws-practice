@@ -35,7 +35,7 @@ class News extends React.Component {
   }
 
   handleUpdate() {
-    axios.post('http://localhost:8081/update', {
+    axios.post('/update', {
       id: this.props.id,
       title: this.state.title
     }).then(res => {
@@ -51,7 +51,7 @@ class News extends React.Component {
   }
 
   handleDelete() {
-    axios.post('http://localhost:8081/delete', {
+    axios.post('/delete', {
       id: this.props.id
     }).then(res => {
       this.props.callBack();
