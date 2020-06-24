@@ -1,8 +1,13 @@
 # ECS Service & Task Definition
 locals {
-  app_image     = "823861797682.dkr.ecr.ap-southeast-2.amazonaws.com/frontend:latest"
+  # app_image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/frontend:latest"
   app_name      = "companynews"
   port_http     = 80
+}
+
+data "aws_ecr_image" "front_latest" {
+  repository_name = "frontend"
+  image_tag       = "latest"
 }
 
 resource "aws_ecs_task_definition" "companynews" {
@@ -13,13 +18,16 @@ resource "aws_ecs_task_definition" "companynews" {
   {
     "name": "${local.app_name}",
     "container_name": "${local.app_name}",
-    "image": "${local.app_image}",
+    "image": "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${data.aws_ecr_image.front_latest.repository_name}@${data.aws_ecr_image.front_latest.image_digest}",
     "memoryReservation": ${var.container_memory_reservation},
     "portMappings": [
       {
         "ContainerPort": ${local.port_http},
         "Protocol": "tcp"
       }
+    ],
+    "environment" : [
+        { "name" : "REACT_APP_BACKEND_URL", "value" : "${aws_alb.backend_main.dns_name}" }
     ]
   }
 ]

@@ -1,4 +1,4 @@
-# ECS Cluster
+# ECS ASG Cluster
 resource "aws_security_group" "ecs_sg" {
   name        = "${var.app_name}-ECS-SG"
   vpc_id      = "${module.vpc.vpc_id}"
@@ -24,8 +24,6 @@ resource "aws_security_group" "ecs_sg" {
     }
   ]
 }
-
-
 
 data "aws_ami" "ecs" {
   most_recent = true
@@ -80,11 +78,11 @@ resource "aws_launch_configuration" "lc_ecs" {
 
 resource "aws_autoscaling_group" "ecs_asg" {
   name                      = "${var.app_name}-FRONTEND-ECS-ASG"
-  max_size                  = 2
-  min_size                  = 1
+  max_size                  = "${var.ecs_service_max_size}"
+  min_size                  = "${var.ecs_service_min_size}"
   health_check_grace_period = 300
   health_check_type         = "ELB"
-  desired_capacity          = 1
+  desired_capacity          = "${var.ecs_service_desired_count}"
   force_delete              = true
   # placement_group           = "${aws_placement_group.test.id}"
   launch_configuration      = "${aws_launch_configuration.lc_ecs.name}"
@@ -92,39 +90,16 @@ resource "aws_autoscaling_group" "ecs_asg" {
   wait_for_capacity_timeout   = 0
   # target_group_arns         = ["${aws_alb_target_group.frontend.arn}"]
 
-#   initial_lifecycle_hook {
-#     name                 = "foobar"
-#     default_result       = "CONTINUE"
-#     heartbeat_timeout    = 2000
-#     lifecycle_transition = "autoscaling:EC2_INSTANCE_LAUNCHING"
-
-#     notification_metadata = <<EOF
-# {
-#   "foo": "bar"
-# }
-# EOF
-
-#     notification_target_arn = "arn:aws:sqs:us-east-1:444455556666:queue1*"
-#     role_arn                = "arn:aws:iam::123456789012:role/S3Access"
-#   }
-
   tag {
-    key                 = "foo"
-    value               = "bar"
+    key                 = "environment"
+    value               = "frontend"
     propagate_at_launch = true
   }
 
   timeouts {
-    delete = "15m"
-  }
-
-  tag {
-    key                 = "lorem"
-    value               = "ipsum"
-    propagate_at_launch = false
+    delete = "3m"
   }
 }
-
 
 output "ami_id" {
   value = "${data.aws_ami.ecs.id}"

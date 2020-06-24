@@ -11,7 +11,10 @@
             owner: tomcat
             mode: 0644
           notify: restart tomcat
-    
+        - name: Remove tomcat ROOT file (delete folder)
+          file:
+            path: /usr/share/tomcat/webapps/ROOT
+            state: absent
       handlers:
         - name: restart tomcat
           service:

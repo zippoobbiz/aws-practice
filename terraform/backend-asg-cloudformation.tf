@@ -85,22 +85,22 @@ resource "aws_launch_configuration" "lc_new" {
   }
 }
 
-# resource "aws_launch_configuration" "lc_blue" {
-#   name          = "lc_blue"
-#   image_id      = "${data.aws_ami.tomcat_ami.id}"
-#   instance_type = "t2.micro"
-#   key_name                    = "${var.ssh_key_name}"
-#   security_groups             = [
-#     "${aws_security_group.asg_sg.id}",
-#     "${aws_security_group.all_from_bastion.id}"
-#   ]
-#   associate_public_ip_address = false
-#   user_data = "${data.template_file.asg_user_data.rendered}"
-#   enable_monitoring = true
-#   lifecycle {
-#     create_before_destroy = true
-#   }
-# }
+resource "aws_launch_configuration" "lc_blue" {
+  name          = "lc_blue"
+  image_id      = "${data.aws_ami.tomcat_ami.id}"
+  instance_type = "t2.micro"
+  key_name                    = "${var.ssh_key_name}"
+  security_groups             = [
+    "${aws_security_group.asg_sg.id}",
+    "${aws_security_group.all_from_bastion.id}"
+  ]
+  associate_public_ip_address = false
+  user_data = "${data.template_file.asg_user_data.rendered}"
+  enable_monitoring = true
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
 
 resource "aws_cloudformation_stack" "autoscaling_group" {
@@ -113,7 +113,7 @@ Resources:
     Properties:
       VPCZoneIdentifier: ["${join("\",\"", module.vpc.private_subnets)}"]
       AvailabilityZones: ["${join("\",\"", data.aws_availability_zones.available.names)}"]
-      LaunchConfigurationName: "${aws_launch_configuration.lc_new.name}"
+      LaunchConfigurationName: "${aws_launch_configuration.lc_blue.name}"
       MinSize: "${var.asg_min_size}"
       MaxSize: "${var.asg_max_size}"
       DesiredCapacity: "${var.asg_desired_capacity}"

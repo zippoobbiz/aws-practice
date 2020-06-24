@@ -5,22 +5,16 @@ supported operations:
 3. View news id
 4. Delete news
 
+## Dev
 
-## Docker build
-
-### Dev build
+### Build
 ```bash
 docker build -t sample:dev .
 ```
 
-### Prod build
-```bash
-docker build -f Dockerfile.prod -t sample:prod .
-```
+## Run
 
-## Docker run
-
-### dev run with hot reload
+### run with hot reload
 ```bash
 docker run \
     -it \
@@ -28,6 +22,7 @@ docker run \
     -v ${PWD}:/app \
     -v /app/node_modules \
     -p 3001:3000 \
+    -e REACT_APP_BACKEND_URL=foo \
     -e CHOKIDAR_USEPOLLING=true \
     sample:dev
 ```
@@ -40,28 +35,35 @@ docker run \
     -v ${PWD}:/app \
     -v /app/node_modules \
     -p 3001:3000 \
+    --env REACT_APP_BACKEND_URL=foo
     -e CHOKIDAR_USEPOLLING=true \
     sample:dev
 ```
+## Prod
 
-### Prod run
+### Build
+```bash
+docker build --build-arg REACT_APP_BACKEND_URL=foo -f Dockerfile.prod -t sample:prod .
+```
+
+### Run
 ```bash
 docker run -it --rm -p 1337:80 sample:prod
 ```
 
 ## AWS ECR push
 
-### Docker login
+### Login
 ```bash
-aws ecr get-login-password --region "ap-southeast-2" | docker login --username AWS --password-stdin <account_id>.dkr.ecr.ap-southeast-2.amazonaws.com
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 ```
 
-### tag
+### Tag
 ```bash
-docker tag <image> <account_id>.dkr.ecr.ap-southeast-2.amazonaws.com/frontend
+docker tag sample:prod $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend
 ```
 
-### push
+### Push
 ```bash
-docker push <account_id>.dkr.ecr.ap-southeast-2.amazonaws.com/frontend
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/frontend
 ```
