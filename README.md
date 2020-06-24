@@ -30,6 +30,9 @@ Since this is a pratice, I will try to use different solution for cross AZ imple
 
 * Java prevayler
 
-### the code is built manunally and the compiled package is loaded to ami via packer. CI/CD implementation is undergoing, described in the diagram below.
+## CI/CD
+Using GitLab, building in progress
+![Alt text](cicd.png?raw=true "Title")
 
-![Alt text](diagram.png?raw=true "Title")
+## Diagram
+![Alt text](infrastructure.png?raw=true "Title")
